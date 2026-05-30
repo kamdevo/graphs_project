@@ -30,3 +30,35 @@ class Graph:
                 weight = float(row[2]) #Extract weight column value and convert to float
                 self.add_edge(source, target, weight) #Add the edge to the graph using the add_edge method
     
+    def check_degree(self, node):
+        if node not in self.adjacency:
+            return None
+        return len(self.adjacency[node])  # ← esto debe estar FUERA del if
+
+
+    def is_simple(self):
+        for source, target, weight in self.edges:
+        # check for self-loops
+            if source == target:
+                return False
+    
+    # check for duplicate edges
+        pairs = [(min(s, t), max(s, t)) for s, t, w in self.edges]
+        if len(pairs) != len(set(pairs)):
+            return False
+    
+        return True
+
+    
+    def is_complete(self):
+    # primero debe ser simple
+        if not self.is_simple():
+            return False
+    
+        n = len(self.adjacency)  # total de nodos
+    
+        for node in self.adjacency:
+            if len(self.adjacency[node]) != n - 1:
+                return False
+    
+    return True
