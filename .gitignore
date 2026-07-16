@@ -1,0 +1,10 @@
+# __pycache__/
+__pycache__/
+#.venv folder
+.venv/
+# VSCode settings
+.vscode/
+
+graphs_project.egg-info/
+
+.data/
