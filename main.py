@@ -6,9 +6,9 @@ g = Graph()
 g.load_from_file('./data/grafos/grafo4.csv')
 print(g.adjacency)
 print(g.edges)
-print(g.check_degree(0))  # grado del nodo 0
+print(g.check_degree(0))  # node 0 degree
 
-if g.is_simple():  # comprobar si el grafo es simple
+if g.is_simple():  # checlk if graph is simple
     print("El grafo es simple")
 else:
     print("El grafo es multigrafo")
@@ -16,25 +16,25 @@ else:
 impares = g.odd_degree_nodes()
 print("Nodos con grado impar:", impares)
 
-# Punto 8: circuito de Euler
+# Exercise 8: Eulerian circuit
 if g.has_eulerian_circuit():
     print("Tiene circuito euleriano")
 
-# Punto 7: camino de Euler
+# Exercise 7: Eulerian path
 if g.has_eulerian_path():
     print("Tiene camino euleriano")
 
-# Punto 2: ¿es un árbol?
+# Exercise 2: Is the graph a tree?
 if g.is_tree():
     print("El grafo es un arbol")
 else:
     print("El grafo no es un arbol")
 
-# Punto 4: ¿es plano?
-if g.is_planar():
-    print("El grafo es plano")
+# Exercise 3: Is the graph a forest?
+if g.is_forest():
+    print("El grafo es un bosque")
 else:
-    print("El grafo no es plano")
+    print("El grafo no es un bosque")
 
 view = GraphView(g)
 view.display()
