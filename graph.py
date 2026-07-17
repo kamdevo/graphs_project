@@ -1,5 +1,5 @@
 import csv
-from planarity import is_planar_graph
+
 
 
 class Graph:
@@ -90,7 +90,7 @@ class Graph:
         return len(visited) == len(active_nodes)
 
     # ---------------------------------------------------------------
-    # Punto 7: Camino de Euler
+    # Point 7: Eulerian path
     # ---------------------------------------------------------------
     def has_eulerian_path(self):
         if not self.is_connected():
@@ -99,7 +99,7 @@ class Graph:
         return cantidad == 0 or cantidad == 2
 
     # ---------------------------------------------------------------
-    # Punto 8: Circuito de Euler
+    # Point 8: Eulerian circuit
     # ---------------------------------------------------------------
     def has_eulerian_circuit(self):
         if not self.is_connected():
@@ -110,9 +110,9 @@ class Graph:
         return self.has_eulerian_circuit()
 
     # ---------------------------------------------------------------
-    # Punto 2: ¿Es un árbol?
-    # Un grafo es árbol si es simple, conexo y tiene exactamente n-1 aristas
-    # (esto evita ciclos sin necesidad de un recorrido extra de detección).
+    # Point 2: Is the graph a tree?
+    # A tree is a simple, connected graph with exactly n-1 edges
+    # (this avoids cycles without needing an extra traversal for detection).
     # ---------------------------------------------------------------
     def is_tree(self):
         if not self.adjacency:
@@ -124,20 +124,38 @@ class Graph:
         if not self.is_connected():
             return False
 
-        n = len(self.adjacency)   # numero de nodos
-        m = len(self.edges)       # numero de aristas
+        n = len(self.adjacency)   # number of nodes
+        m = len(self.edges)       # number of edges
 
         return m == n - 1
 
-    # ---------------------------------------------------------------
-    # Punto 4: ¿Es un grafo plano?
-    # Implementado desde cero (ver planarity.py) usando el algoritmo de
-    # adicion de caminos de Demoucron-Malgrange-Pretelaat: se separa el
-    # grafo en componentes biconexas y a cada una se le va insertando
-    # cara por cara hasta cubrir todas las aristas, o se detecta que
-    # algun fragmento no cabe en ninguna cara (grafo no plano).
-    # ---------------------------------------------------------------
-    def is_planar(self):
-        vertices = self.adjacency.keys()
-        edges = [(source, target) for source, target, weight in self.edges]
-        return is_planar_graph(vertices, edges)
+    # Point 3: Is the graph a forest?
+    # A forest is a collection of trees: a simple graph where every
+    # connected component is acyclic. For a simple graph, this holds
+    # exactly when edges == nodes - number_of_connected_components
+    # (each tree with k nodes has exactly k-1 edges, so summing that
+    # over every component gives n - c; any extra edge closes a cycle).
+
+    def is_forest(self):
+        if not self.is_simple():
+            return False
+
+        visited = set()
+        num_components = 0
+
+        for node in self.adjacency:
+            if node not in visited:
+                num_components += 1
+                  # BFS to walk the whole component starting at this node
+                queue = [node]
+                visited.add(node)
+                while queue:
+                    current = queue.pop(0)
+                    for neighbor, _ in self.adjacency[current]:
+                        if neighbor not in visited:
+                            visited.add(neighbor)
+                            queue.append(neighbor)
+
+        n = len(self.adjacency)
+        m = len(self.edges)
+        return m == n - num_components
